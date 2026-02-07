@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiber Foods Group - Cap Table Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .login-header p {
+            margin: 0;
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #C4D600;
+            color: #333;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: #b0c200;
+        }
+        
+        .dashboard {
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-email {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .btn-logout {
+            padding: 8px 16px;
+            background: #FF69B4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .btn-logout:hover {
+            background: #ff4da6;
+        }
+        
+        .btn-admin {
+            padding: 8px 16px;
+            background: #C4D600;
+            color: #333;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .btn-admin:hover {
+            background: #b0c200;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0;
+            background: white;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 0 40px;
+        }
+        
+        .tab {
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #666;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tab.active {
+            border-bottom-color: #C4D600;
+            color: #C4D600;
+            font-weight: 600;
+        }
+        
+        .tab:hover {
+            color: #C4D600;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .card h2 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .card h3 {
+            margin: 30px 0 15px 0;
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .card p {
+            margin: 0 0 20px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .stat-card.lime {
+            border-left: 4px solid #C4D600;
+        }
+        
+        .stat-card.pink {
+            border-left: 4px solid #FF69B4;
+        }
+        
+        .stat-card.gray {
+            border-left: 4px solid #8B8B8B;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead tr {
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        th {
+            text-align: left;
+            padding: 12px;
+            color: #666;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        th.right {
+            text-align: right;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        td {
+            padding: 12px;
+            color: #333;
+        }
+        
+        td.right {
+            text-align: right;
+        }
+        
+        td.bold {
+            font-weight: 600;
+        }
+        
+        .founder-badge {
+            margin-left: 8px;
+            padding: 2px 8px;
+            background: #C4D600;
+            color: #333;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .dilution {
+            color: #FF69B4;
+            font-weight: 600;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .scenario-results {
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .highlight {
+            color: #C4D600;
+        }
+        
+        .chart-container {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .chart-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            min-width: 200px;
+        }
+        
+        .chart-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .chart-label {
+            flex: 1;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .chart-value {
+            color: #666;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 20px;
+        }
+        
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+        
+        .btn-close:hover {
+            color: #333;
+        }
+        
+        .cla-list-item {
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cla-info {
+            flex: 1;
+        }
+        
+        .cla-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .cla-details {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .btn-delete {
+            padding: 6px 12px;
+            background: #FF69B4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .btn-delete:hover {
+            background: #ff4da6;
+        }
+        
+        .btn-add {
+            width: 100%;
+            padding: 12px;
+            background: #C4D600;
+            color: #333;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .btn-add:hover {
+            background: #b0c200;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row-full {
+            margin-bottom: 15px;
+        }
+        
+        .form-row label,
+        .form-row-full label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        
+        .form-row input,
+        .form-row-full input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>Fiber Foods Group</h1>
+                <p>Cap Table Management</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="emailInput" placeholder="your.email@company.com" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboardScreen" class="dashboard hidden">
+        <div class="header">
+            <div>
+                <h1>Fiber Foods Group</h1>
+                <p>Cap Table Dashboard</p>
+            </div>
+            <div class="user-info">
+                <span class="user-email" id="userEmail"></span>
+                <button class="btn-admin hidden" id="adminBtn">Admin</button>
+                <button class="btn-logout" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="overview">Overview</button>
+            <button class="tab" data-tab="cla-conversion">CLA Conversion</button>
+            <button class="tab hidden" id="scenariosTab" data-tab="scenarios">Scenarios</button>
+        </div>
+
+        <div class="content">
+            <!-- Overview Tab -->
+            <div id="overviewTab" class="tab-content">
+                <div class="card">
+                    <h2>Current Ownership Structure</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card lime">
+                            <div class="stat-label">Total Shares</div>
+                            <div class="stat-value">13,714</div>
+                        </div>
+                        <div class="stat-card pink">
+                            <div class="stat-label">Company Valuation</div>
+                            <div class="stat-value">€4,000,000</div>
+                        </div>
+                        <div class="stat-card gray">
+                            <div class="stat-label">Price per Share</div>
+                            <div class="stat-value">€291.66</div>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Shareholder</th>
+                                <th class="right">Shares</th>
+                                <th class="right">Ownership %</th>
+                                <th class="right">Current Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Serunkuma BV<span class="founder-badge">FOUNDER</span></td>
+                                <td class="right">5,468</td>
+                                <td class="right bold">39.87%</td>
+                                <td class="right">€1,594,713.88</td>
+                            </tr>
+                            <tr>
+                                <td>Aquarius BV<span class="founder-badge">FOUNDER</span></td>
+                                <td class="right">5,468</td>
+                                <td class="right bold">39.87%</td>
+                                <td class="right">€1,594,713.88</td>
+                            </tr>
+                            <tr>
+                                <td>Fiber Foods Investors BV</td>
+                                <td class="right">2,778</td>
+                                <td class="right bold">20.26%</td>
+                                <td class="right">€810,252.48</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>Ownership Distribution</h2>
+                    <div class="chart-container">
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #C4D600;"></div>
+                            <div class="chart-label">Serunkuma BV</div>
+                            <div class="chart-value">39.87%</div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #FF69B4;"></div>
+                            <div class="chart-label">Aquarius BV</div>
+                            <div class="chart-value">39.87%</div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #8B8B8B;"></div>
+                            <div class="chart-label">Fiber Foods Investors BV</div>
+                            <div class="chart-value">20.26%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLA Conversion Tab -->
+            <div id="claConversionTab" class="tab-content hidden">
+                <div class="card">
+                    <h2>CLA Conversion Impact - January 2027</h2>
+                    <p>Projected ownership structure after convertible loan agreements convert to equity</p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card lime">
+                            <div class="stat-label">Total CLAs</div>
+                            <div class="stat-value">€2,042,111.67</div>
+                        </div>
+                        <div class="stat-card pink">
+                            <div class="stat-label">New Shares</div>
+                            <div class="stat-value">6,244</div>
+                        </div>
+                        <div class="stat-card gray">
+                            <div class="stat-label">Total Shares After</div>
+                            <div class="stat-value">19,958</div>
+                        </div>
+                    </div>
+
+                    <h3>CLA Holders</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Investor</th>
+                                <th class="right">CLA Amount</th>
+                                <th class="right">Conversion Shares</th>
+                                <th class="right">Post-Conversion %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PeakBridge Foodsparks SCSp</td>
+                                <td class="right">€650,000.00</td>
+                                <td class="right">2,517</td>
+                                <td class="right bold">12.61%</td>
+                            </tr>
+                            <tr>
+                                <td>Innovatiefonds Brabant</td>
+                                <td class="right">€350,000.00</td>
+                                <td class="right">1,359</td>
+                                <td class="right bold">6.81%</td>
+                            </tr>
+                            <tr>
+                                <td>VP Ventures</td>
+                                <td class="right">€422,000.00</td>
+                                <td class="right">1,638</td>
+                                <td class="right bold">8.21%</td>
+                            </tr>
+                            <tr>
+                                <td>Other CLA Investors</td>
+                                <td class="right">€620,111.67</td>
+                                <td class="right">2,410</td>
+                                <td class="right bold">12.08%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Existing Shareholders (Post-Conversion)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Shareholder</th>
+                                <th class="right">Shares</th>
+                                <th class="right">Current %</th>
+                                <th class="right">Post-Conversion %</th>
+                                <th class="right">Dilution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Serunkuma BV</td>
+                                <td class="right">5,468</td>
+                                <td class="right">39.87%</td>
+                                <td class="right bold">27.40%</td>
+                                <td class="right dilution">-12.47%</td>
+                            </tr>
+                            <tr>
+                                <td>Aquarius BV</td>
+                                <td class="right">5,468</td>
+                                <td class="right">39.87%</td>
+                                <td class="right bold">27.40%</td>
+                                <td class="right dilution">-12.47%</td>
+                            </tr>
+                            <tr>
+                                <td>Fiber Foods Investors BV</td>
+                                <td class="right">2,778</td>
+                                <td class="right">20.26%</td>
+                                <td class="right bold">13.92%</td>
+                                <td class="right dilution">-6.34%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>Post-Conversion Ownership Distribution</h2>
+                    <div class="chart-container">
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #C4D600;"></div>
+                            <div class="chart-label">Serunkuma BV</div>
+                            <div class="chart-value">27.40%</div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #FF69B4;"></div>
+                            <div class="chart-label">Aquarius BV</div>
+                            <div class="chart-value">27.40%</div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #8B8B8B;"></div>
+                            <div class="chart-label">Fiber Foods Investors BV</div>
+                            <div class="chart-value">13.92%</div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #D3D3D3;"></div>
+                            <div class="chart-label">PeakBridge Foodsparks SCSp</div>
+                            <div class="chart-value">12.61%</div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #A9A9A9;"></div>
+                            <div class="chart-label">Other CLA Investors</div>
+                            <div class="chart-value">12.08%</div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #696969;"></div>
+                            <div class="chart-label">VP Ventures</div>
+                            <div class="chart-value">8.21%</div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-color" style="background: #DCDCDC;"></div>
+                            <div class="chart-label">Innovatiefonds Brabant</div>
+                            <div class="chart-value">6.81%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenarios Tab -->
+            <div id="scenariosContent" class="tab-content hidden">
+                <div class="card">
+                    <h2>Investment Scenario Calculator</h2>
+                    <p>Model the impact of new investment rounds on ownership structure (post-CLA conversion)</p>
+                    
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>New Investment Amount (€)</label>
+                            <input type="number" id="investmentAmount" placeholder="1000000">
+                        </div>
+                        <div class="input-group">
+                            <label>Post-Money Valuation (€)</label>
+                            <input type="number" id="postMoneyValuation" placeholder="8000000">
+                        </div>
+                    </div>
+
+                    <div id="scenarioResults" class="hidden">
+                        <div class="stats-grid scenario-results">
+                            <div>
+                                <div class="stat-label">New Shares Issued</div>
+                                <div class="stat-value" id="newShares">-</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Total Shares After Round</div>
+                                <div class="stat-value" id="totalSharesAfter">-</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">New Investor Ownership</div>
+                                <div class="stat-value highlight" id="newInvestorOwnership">-</div>
+                            </div>
+                        </div>
+
+                        <h3>Founder Impact</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Founder</th>
+                                    <th class="right">Shares</th>
+                                    <th class="right">Post-CLA %</th>
+                                    <th class="right">After Round %</th>
+                                    <th class="right">Additional Dilution</th>
+                                </tr>
+                            </thead>
+                            <tbody id="founderImpactTable">
+                            </tbody>
+                        </table>
+
+                        <h3>All Shareholders After Round</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Shareholder</th>
+                                    <th class="right">Shares</th>
+                                    <th class="right">Ownership %</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allShareholdersTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Beheer CLAs</h2>
+                <button class="btn-close" id="closeModal">&times;</button>
+            </div>
+            
+            <div id="claListContainer"></div>
+            
+            <h3 style="margin: 30px 0 15px 0; color: #333; font-size: 16px;">Nieuwe CLA Toevoegen</h3>
+            <form id="addClaForm">
+                <div class="form-row-full">
+                    <label>Naam Investeerder</label>
+                    <input type="text" id="claName" required placeholder="Bijv. ABC Ventures">
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label>CLA Bedrag (€)</label>
+                        <input type="number" id="claAmount" required placeholder="500000" step="0.01">
+                    </div>
+                    <div>
+                        <label>Conversie Shares</label>
+                        <input type="number" id="claShares" required placeholder="1500">
+                    </div>
+                </div>
+                <div class="form-row-full">
+                    <label>Email (optioneel)</label>
+                    <input type="email" id="claEmail" placeholder="investor@example.com">
+                </div>
+                <button type="submit" class="btn-add">CLA Toevoegen</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const shareholders = [
+            { name: 'Serunkuma BV', shares: 5468, email: 'inez@fiberfoodsgroup.com', isFounder: true },
+            { name: 'Aquarius BV', shares: 5468, email: 'ineke@fiberfoodsgroup.com', isFounder: true },
+            { name: 'Fiber Foods Investors BV', shares: 2778, email: 'holding@fiberfoodsgroup.com', isFounder: false,
+              underlyingInvestors: [{ name: 'Ravelijn Holding BV', email: 'leonie@leonieschipperus.nl' }]
+            }
+        ];
+
+        const defaultClaHolders = [
+            { name: 'PeakBridge Foodsparks SCSp', claAmount: 650000, conversionShares: 2517, email: 'nadav@peakbridge.vc' },
+            { name: 'Innovatiefonds Brabant', claAmount: 350000, conversionShares: 1359, email: 'info@innovatiefondsbrabant.nl' },
+            { name: 'VP Ventures', claAmount: 422000, conversionShares: 1638, email: 'info@vpventures.com' },
+            { name: 'Other CLA Investors', claAmount: 620111.67, conversionShares: 2410, email: null }
+        ];
+
+        let claHolders = [];
+        
+        // Load CLAs from storage or use defaults
+        function loadCLAs() {
+            const saved = localStorage.getItem('claHolders');
+            if (saved) {
+                claHolders = JSON.parse(saved);
+            } else {
+                claHolders = [...defaultClaHolders];
+                saveCLAs();
+            }
+        }
+        
+        function saveCLAs() {
+            localStorage.setItem('claHolders', JSON.stringify(claHolders));
+        }
+        
+        loadCLAs();
+
+        const totalShares = 13714;
+        
+        function getTotalSharesAfterCLA() {
+            const totalCLAShares = claHolders.reduce((sum, cla) => sum + cla.conversionShares, 0);
+            return totalShares + totalCLAShares;
+        }
+        
+        function getTotalCLAAmount() {
+            return claHolders.reduce((sum, cla) => sum + cla.claAmount, 0);
+        }
+
+        let currentUser = null;
+
+        // Load session
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            showDashboard();
+        }
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value.toLowerCase().trim();
+            
+            const shareholder = shareholders.find(s => s.email.toLowerCase() === email);
+            const claHolder = claHolders.find(c => c.email && c.email.toLowerCase() === email);
+            const underlyingInvestor = shareholders
+                .filter(s => s.underlyingInvestors)
+                .flatMap(s => s.underlyingInvestors)
+                .find(ui => ui.email.toLowerCase() === email);
+
+            if (shareholder || claHolder || underlyingInvestor) {
+                currentUser = {
+                    email: email,
+                    isFounder: shareholder?.isFounder || false
+                };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showDashboard();
+            } else {
+                alert('Email not found. Please check your email address and try again.');
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('emailInput').value = '';
+        });
+
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            document.getElementById('userEmail').textContent = currentUser.email;
+            
+            if (currentUser.isFounder) {
+                document.getElementById('scenariosTab').classList.remove('hidden');
+                document.getElementById('adminBtn').classList.remove('hidden');
+            }
+            
+            updateCLADisplay();
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                if (tabName === 'overview') {
+                    document.getElementById('overviewTab').classList.remove('hidden');
+                } else if (tabName === 'cla-conversion') {
+                    updateCLADisplay();
+                    document.getElementById('claConversionTab').classList.remove('hidden');
+                } else if (tabName === 'scenarios') {
+                    document.getElementById('scenariosContent').classList.remove('hidden');
+                }
+            });
+        });
+        
+        // Admin Modal
+        document.getElementById('adminBtn').addEventListener('click', function() {
+            renderCLAList();
+            document.getElementById('adminModal').classList.remove('hidden');
+        });
+        
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('adminModal').classList.add('hidden');
+        });
+        
+        document.getElementById('adminModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+        
+        // Render CLA List in Admin Modal
+        function renderCLAList() {
+            const container = document.getElementById('claListContainer');
+            let html = '';
+            
+            claHolders.forEach((cla, index) => {
+                html += `
+                    <div class="cla-list-item">
+                        <div class="cla-info">
+                            <div class="cla-name">${cla.name}</div>
+                            <div class="cla-details">
+                                Bedrag: €${cla.claAmount.toLocaleString('nl-NL', {minimumFractionDigits: 2})} | 
+                                Shares: ${cla.conversionShares.toLocaleString()} | 
+                                Email: ${cla.email || 'Geen'}
+                            </div>
+                        </div>
+                        <button class="btn-delete" onclick="deleteCLA(${index})">Verwijder</button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Delete CLA
+        window.deleteCLA = function(index) {
+            if (confirm('Weet je zeker dat je deze CLA wilt verwijderen?')) {
+                claHolders.splice(index, 1);
+                saveCLAs();
+                renderCLAList();
+                updateCLADisplay();
+            }
+        };
+        
+        // Add CLA Form
+        document.getElementById('addClaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newCLA = {
+                name: document.getElementById('claName').value,
+                claAmount: parseFloat(document.getElementById('claAmount').value),
+                conversionShares: parseInt(document.getElementById('claShares').value),
+                email: document.getElementById('claEmail').value || null
+            };
+            
+            claHolders.push(newCLA);
+            saveCLAs();
+            renderCLAList();
+            updateCLADisplay();
+            
+            // Reset form
+            this.reset();
+            
+            alert('CLA succesvol toegevoegd!');
+        });
+        
+        // Update CLA Display on page
+        function updateCLADisplay() {
+            const totalSharesAfterCLA = getTotalSharesAfterCLA();
+            const totalCLAs = getTotalCLAAmount();
+            const newShares = totalSharesAfterCLA - totalShares;
+            
+            // Update CLA Conversion Tab stats
+            const claTab = document.getElementById('claConversionTab');
+            if (claTab) {
+                const statCards = claTab.querySelectorAll('.stat-value');
+                if (statCards[0]) statCards[0].textContent = '€' + totalCLAs.toLocaleString('nl-NL', {minimumFractionDigits: 2});
+                if (statCards[1]) statCards[1].textContent = newShares.toLocaleString();
+                if (statCards[2]) statCards[2].textContent = totalSharesAfterCLA.toLocaleString();
+            }
+            
+            // Update CLA Holders table
+            updateCLATable();
+            updateShareholdersPostConversionTable();
+            updatePostConversionChart();
+        }
+        
+        function updateCLATable() {
+            const tbody = document.querySelector('#claConversionTab table tbody');
+            if (!tbody) return;
+            
+            const totalSharesAfterCLA = getTotalSharesAfterCLA();
+            let html = '';
+            
+            claHolders.forEach(cla => {
+                const ownership = ((cla.conversionShares / totalSharesAfterCLA) * 100).toFixed(2);
+                html += `
+                    <tr>
+                        <td>${cla.name}</td>
+                        <td class="right">€${cla.claAmount.toLocaleString('nl-NL', {minimumFractionDigits: 2})}</td>
+                        <td class="right">${cla.conversionShares.toLocaleString()}</td>
+                        <td class="right bold">${ownership}%</td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+        
+        function updateShareholdersPostConversionTable() {
+            const table = document.querySelectorAll('#claConversionTab table')[1];
+            if (!table) return;
+            
+            const tbody = table.querySelector('tbody');
+            const totalSharesAfterCLA = getTotalSharesAfterCLA();
+            let html = '';
+            
+            shareholders.forEach(sh => {
+                const currentPct = ((sh.shares / totalShares) * 100).toFixed(2);
+                const postPct = ((sh.shares / totalSharesAfterCLA) * 100).toFixed(2);
+                const dilution = (currentPct - postPct).toFixed(2);
+                
+                html += `
+                    <tr>
+                        <td>${sh.name}</td>
+                        <td class="right">${sh.shares.toLocaleString()}</td>
+                        <td class="right">${currentPct}%</td>
+                        <td class="right bold">${postPct}%</td>
+                        <td class="right dilution">-${dilution}%</td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+        
+        function updatePostConversionChart() {
+            const chartContainer = document.querySelector('#claConversionTab .card:last-child .chart-container');
+            if (!chartContainer) return;
+            
+            const totalSharesAfterCLA = getTotalSharesAfterCLA();
+            const colors = ['#C4D600', '#FF69B4', '#8B8B8B', '#D3D3D3', '#A9A9A9', '#696969', '#DCDCDC', '#B0B0B0', '#E8E8E8'];
+            let html = '';
+            let colorIndex = 0;
+            
+            shareholders.forEach(sh => {
+                const ownership = ((sh.shares / totalSharesAfterCLA) * 100).toFixed(2);
+                html += `
+                    <div class="chart-item">
+                        <div class="chart-color" style="background: ${colors[colorIndex % colors.length]};"></div>
+                        <div class="chart-label">${sh.name}</div>
+                        <div class="chart-value">${ownership}%</div>
+                    </div>
+                `;
+                colorIndex++;
+            });
+            
+            claHolders.forEach(cla => {
+                const ownership = ((cla.conversionShares / totalSharesAfterCLA) * 100).toFixed(2);
+                html += `
+                    <div class="chart-item">
+                        <div class="chart-color" style="background: ${colors[colorIndex % colors.length]};"></div>
+                        <div class="chart-label">${cla.name}</div>
+                        <div class="chart-value">${ownership}%</div>
+                    </div>
+                `;
+                colorIndex++;
+            });
+            
+            chartContainer.innerHTML = html;
+        }
+
+        // Scenario Calculator
+        function calculateScenario() {
+            const investment = parseFloat(document.getElementById('investmentAmount').value);
+            const valuation = parseFloat(document.getElementById('postMoneyValuation').value);
+            
+            if (!investment || !valuation || investment <= 0 || valuation <= 0) {
+                document.getElementById('scenarioResults').classList.add('hidden');
+                return;
+            }
+            
+            const totalSharesAfterCLA = getTotalSharesAfterCLA();
+            const newShares = (investment / valuation) * totalSharesAfterCLA;
+            const totalSharesAfterRound = totalSharesAfterCLA + newShares;
+            const newInvestorOwnership = ((newShares / totalSharesAfterRound) * 100).toFixed(2);
+            
+            document.getElementById('newShares').textContent = Math.round(newShares).toLocaleString();
+            document.getElementById('totalSharesAfter').textContent = Math.round(totalSharesAfterRound).toLocaleString();
+            document.getElementById('newInvestorOwnership').textContent = newInvestorOwnership + '%';
+            
+            // Founder Impact Table
+            let founderHtml = '';
+            shareholders.filter(sh => sh.isFounder).forEach(sh => {
+                const postCLA = ((sh.shares / totalSharesAfterCLA) * 100).toFixed(2);
+                const afterRound = ((sh.shares / totalSharesAfterRound) * 100).toFixed(2);
+                const dilution = (postCLA - afterRound).toFixed(2);
+                
+                founderHtml += `
+                    <tr>
+                        <td>${sh.name}</td>
+                        <td class="right">${sh.shares.toLocaleString()}</td>
+                        <td class="right">${postCLA}%</td>
+                        <td class="right bold">${afterRound}%</td>
+                        <td class="right dilution">-${dilution}%</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('founderImpactTable').innerHTML = founderHtml;
+            
+            // All Shareholders Table
+            let allHtml = '';
+            shareholders.forEach(sh => {
+                const afterRound = ((sh.shares / totalSharesAfterRound) * 100).toFixed(2);
+                allHtml += `
+                    <tr>
+                        <td>${sh.name}</td>
+                        <td class="right">${sh.shares.toLocaleString()}</td>
+                        <td class="right bold">${afterRound}%</td>
+                    </tr>
+                `;
+            });
+            
+            claHolders.forEach(cla => {
+                const afterRound = ((cla.conversionShares / totalSharesAfterRound) * 100).toFixed(2);
+                allHtml += `
+                    <tr>
+                        <td>${cla.name}</td>
+                        <td class="right">${cla.conversionShares.toLocaleString()}</td>
+                        <td class="right bold">${afterRound}%</td>
+                    </tr>
+                `;
+            });
+            
+            allHtml += `
+                <tr style="border-top: 2px solid #C4D600; background: #f9f9f9;">
+                    <td style="font-weight: 700;">New Investor</td>
+                    <td class="right" style="font-weight: 700;">${Math.round(newShares).toLocaleString()}</td>
+                    <td class="right" style="font-weight: 700; color: #C4D600;">${newInvestorOwnership}%</td>
+                </tr>
+            `;
+            
+            document.getElementById('allShareholdersTable').innerHTML = allHtml;
+            document.getElementById('scenarioResults').classList.remove('hidden');
+        }
+
+        document.getElementById('investmentAmount').addEventListener('input', calculateScenario);
+        document.getElementById('postMoneyValuation').addEventListener('input', calculateScenario);
+    </script>
+</body>
+</html>
